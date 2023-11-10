@@ -1,0 +1,26 @@
+{
+    "name": "sergi/tarea6",
+    "description": "Tarea Unidad6",
+    "type": "project",
+    "license": "gnu/gpl",
+    "config": {
+        "optimize-autoloader": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Clases\\": "src"
+        }
+    },
+    "authors": [
+        {
+            "name": "sergi",
+            "email": "sergio.ume@hotmail.com"
+        }
+    ],
+    "require": {
+        "php2wsdl/php2wsdl": "^0.6.1",
+        "wsdl2phpgenerator/wsdl2phpgenerator": "^3.4"
+    }
+}
+
+
