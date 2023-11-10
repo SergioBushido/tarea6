@@ -1,44 +1,88 @@
 <?php
-$url = 'http://localhost/tarea6.1/servidorSoap/servicioW.php'; //se hace llamada a este servicio que se crea
+// URL del servicio web y espacio de nombres
+$url = 'http://localhost/tarea6.1/servidorSoap/servicioW.php';
 $uri = 'http://localhost/tarea6.1/servidorSoap';
 
-
 try {
-    //SoapClient el primer parámetro es nulo ya que no necesita ningún wsdl porque ya sabe el nombre de las funciones
+    // Crear un cliente SOAP
     $cliente = new SoapClient(null, ['location' => $url, 'uri' => $uri]);
 } catch (SoapFault $f) {
+    // Manejar errores en la creación del cliente SOAP
     die("Error en cliente SOAP:" . $f->getMessage());
 }
-$codP = 2; //parámetro de código de producto
-$codT = 14; //parámetro de código de tienda
-$codF = 'CONSOL'; //parámetro de código de familia
 
-//funcion getPvp ----------------------------------------------------------------------------
-//hacemos una petición al servidor, llamando a la función getPvp y va a devolver el precio (pvp)
-$pvp = $cliente->__soapCall('getPvp', ['id' => $codP]); //hace el soapCall con el nombre de la función que ya conoce
-$precio = ($pvp == null) ? "No existe es Producto" : $pvp; //operador ternario: si es verdero (null) sale "No existe es Producto"
-echo "Código de producto de Código $codP: $precio"; //visualiza el resultado
+// Parámetros para las operaciones
+$codP = 8;
+$codT = 3;
+$codF = 'EBOOK';
 
+// Llamadas a las operaciones del servicio web
+$pvp = $cliente->__soapCall('getPvp', ['id' => $codP]);
+$precio = ($pvp == null) ? "No existe es Producto" : $pvp;
 
-//funcion getFamilias -----------------------------------------------------------------------
-echo "<br>Código de Familas";
-//obtiene todas las familias
-$familias = $cliente->__soapCall('getFamilias', []); //cuando no se le pasa ningún parámetro hay que pasarle un array vacío
-echo "<ul>"; //abre lista desordenada
-foreach ($familias as $k => $v) {//hace una lista con todas las familias
-    echo "<code><li>$v</li></code>";
-}
-echo "</ul>";
+$familias = $cliente->__soapCall('getFamilias', []);
+$productos = $cliente->__soapCall('getProductosFamilia', ['codF' => $codF]);
+$unidades = $cliente->__soapCall('getStock', ['codP' => $codP, 'codT' => $codT]);
+?>
 
-//funcion getProductosFamila ----------------------------------------------------------------
-$productos = $cliente->__soapCall('getProductosFamilia', ['codF' => $codF]); //1º parámetro: nombre de la función, 2º parámetro: un array
-echo "<br>Productos de la Famila $codF:";
-echo "<ul>";
-foreach ($productos as $k => $v) { //hace una lista con todos los productos
-    echo "<code><li>$v</li></code>";
-}
-echo "</ul>";
+<!DOCTYPE html>
+<html lang="en">
 
-// funcion getStock -------------------------------------------------------------------------
-$unidades = $cliente->__soapCall('getStock', ['codP' => $codP, 'codT' => $codT]); //llamada al método getStock, el cual devuelve el Stock dado un código del producto y el código de la tienda
-echo "<br>Unidades del producto de código; $codP en la tienda de código: $codT: $unidades"; //muestra las unidades del producto de esa tienda
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 50%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Tabla para mostrar resultados -->
+    <h1>PRODUCTOS</h1>
+    <table>
+        <tr>
+            <th>Código producto</th>
+            <th>Precio</th>
+        </tr>
+        <tr>
+            <td><?php echo $codP; ?></td>
+            <td><?php echo $precio; ?></td>
+        </tr>
+    </table>
+
+    <!-- Lista de códigos de familias -->
+    <h2>Códigos por Familias</h2>
+    <ul>
+        <?php foreach ($familias as $k => $v) : ?>
+            <li><code><?php echo $v; ?></code></li>
+        <?php endforeach; ?>
+    </ul>
+
+    <!-- Lista de productos de una familia -->
+    <h2>Familia de productos <?php echo $codF; ?></h2>
+    <ul>
+        <?php foreach ($productos as $k => $v) : ?>
+            <li><?php echo $v; ?></li>
+        <?php endforeach; ?>
+    </ul>
+
+    <!-- Resultado de unidades en una tienda -->
+    <h2>Unidades del producto con código <?php echo $codP; ?> en la tienda <?php echo $codT; ?></h2>
+    <p><?php echo $unidades; ?></p>
+</body>
+
+</html>

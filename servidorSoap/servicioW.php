@@ -1,14 +1,20 @@
 <?php
-/*esto es una copia de servicio.php, es decir, creamos un servidor soap pero añadiendo como parámetro el servicio.wsdl en vez del 
-primer parámetro null que tenía servicio.php. También indica qué clase contiene las funciones (Clase Operaciones)*/
-
+// Incluimos la biblioteca de autoloading de Composer para cargar las clases automáticamente.
 require '../vendor/autoload.php';
-$url = "http://localhost/tarea6.1/servidorSoap/servicio.wsdl"; //ruta del archivo wsdl
+
+// Definimos la URL del archivo WSDL que utilizará el servidor.
+$url = "http://localhost/tarea6.1/servidorSoap/servicio.wsdl"; 
 
 try {
-    $server = new SoapServer($url);//creamos el servidor
-    $server->setClass('Clases\Operaciones'); //indica la clase que contiene las funciones
-    $server->handle(); //inicia el servidor Soap
+    // Creamos un objeto SoapServer utilizando la URL del archivo WSDL.
+    $server = new SoapServer($url);
+
+    // Establecemos la clase que contiene las funciones que se expondrán como servicios web.
+    $server->setClass('Clases\Operaciones'); 
+
+    // Manejamos las solicitudes SOAP entrantes.
+    $server->handle(); 
 } catch (SoapFault $f) {
+    // En caso de error, mostramos un mensaje con la descripción del error.
     die("error en server: " . $f->getMessage());
 }

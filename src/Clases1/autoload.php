@@ -1,5 +1,5 @@
 <?php
-//este archivo php se genera al llamar a generarClases.php 
+ 
 
  function autoload_3094128f773ec93ac6a6c7b01dbbc13a($class)
 {
@@ -13,6 +13,6 @@
 
 spl_autoload_register('autoload_3094128f773ec93ac6a6c7b01dbbc13a');
 
-// Do nothing. The rest is just leftovers from the code generation.
+
 {
 }

@@ -7,22 +7,22 @@
   </types>
   <portType name="Clases.OperacionesPort">
     <operation name="getPvp">
-      <documentation>Obtiene el PVP de un producto a partir de su codigo</documentation>
+      <documentation>Devuelve el precio a partir del codigo</documentation>
       <input message="tns:getPvpIn"/>
       <output message="tns:getPvpOut"/>
     </operation>
     <operation name="getStock">
-      <documentation>Devuelve el numero de unidades que existen en una tienda de un producto</documentation>
+      <documentation>Numero de unidades de un producto</documentation>
       <input message="tns:getStockIn"/>
       <output message="tns:getStockOut"/>
     </operation>
     <operation name="getFamilias">
-      <documentation>Devuelve un array con los codigos de todas las familias</documentation>
+      <documentation>Array con los codigos de las familias</documentation>
       <input message="tns:getFamiliasIn"/>
       <output message="tns:getFamiliasOut"/>
     </operation>
     <operation name="getProductosFamilia">
-      <documentation>Devuelve un array con los nombres de los productos de una familia</documentation>
+      <documentation>Array con nombres de productos de una familia</documentation>
       <input message="tns:getProductosFamiliaIn"/>
       <output message="tns:getProductosFamiliaOut"/>
     </operation>

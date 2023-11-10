@@ -5,54 +5,92 @@ use Clases\Clases1\ClasesOperacionesService;
 
 $url = 'http://localhost/tarea6.1/servidorSoap/servicio.wsdl';
 
-/*********************************** COMENTARIO SOBRE clienteW2.php *************************************************/
-
-/* La diferencia entre clienteW2.php y cliente.php y clienteW.php es que para la implementación del código de la primera (clienteW2.php)
-utilizamos un objecto de la clase ClasesOperacionesService. Con dicho objeto, llamamos a las funciones correspondientes, dependiendo 
-de los resultados que queramos obtener. Utliza servicio.wsdl pero no utilizamos el método soapCall, ya que llamamos ditrectamente a 
-los métodos de la clase ClasesOperacionesService*/
-
 try {
-    $cliente = new SoapClient($url); //le pasamos el wsdl
+    $cliente = new SoapClient($url);
 } catch (SoapFault $f) {
     die("Error en cliente SOAP:" . $f->getMessage());
 }
 
-$codP = 2;
+$codP = 5;
 $codT = 1;
-$codF = 'MP3';
+$codF = 'ORDENA';
 
-//---------------------------------------------------------------------------------------
-$objeto = new ClasesOperacionesService(); //creamos un objeto de la clase ClasesOperacionesService para trabajar con ella
+$objeto = new ClasesOperacionesService();
 
-//trabajamos todos los métodos a partir de la clase generada del wsdl:
-//funcion getPvp ------------------------------------------------------------------------
-$pvp = $objeto->getPvp($codP); //llama al método getPvp del objeto de la clase ClasesOperacionesService y lo recoge en la variable pvp
+$pvp = $objeto->getPvp($codP);
 $precio = ($pvp == null) ? "No existe es Producto" : $pvp;
-echo "Código de producto de Código $codP: $precio";
 
+$familias = $objeto->getFamilias();
 
-//funcion getFamilias -------------------------------------------------------------------
-echo "<br>Códigos de Familas:";
-$prueba = $objeto->getFamilias();
-echo "<ul>";
-foreach ($prueba as $k => $v) {
-    echo "<code><li>$v</li></code>";
-}
-echo "</ul>";
-
-
-//funcion getProductosFamila ------------------------------------------------------------
 $productos = $objeto->getProductosFamilia($codF);
-echo "<br>Productos de la Famila $codF:";
-$prueba = $objeto->getProductosFamilia($codF);
-echo "<ul>";
-foreach ($prueba as $k => $v) {
-    echo "<code><li>$v</li></code>";
-}
-echo "</ul>";
 
-
-// funcion getStock ---------------------------------------------------------------------
 $unidades = $objeto->getStock($codP, $codT);
-echo "<br>Unidades del producto de código $codP en la tienda de código $codT: $unidades";
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 50%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        code {
+            font-family: monospace;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>PRODUCTOS</h1>
+    <table>
+        <tr>
+            <th>Código producto</th>
+            <th>Precio</th>
+        </tr>
+        <tr>
+            <td><?php echo $codP; ?></td>
+            <td><?php echo $precio; ?></td>
+        </tr>
+    </table>
+
+    <h2>Códigos de Familias</h2>
+    <ul>
+        <?php foreach ($familias as $k => $v) : ?>
+            <li><code><?php echo $v; ?></code></li>
+        <?php endforeach; ?>
+    </ul>
+
+    <h2>Productos de la Familia <?php echo $codF; ?></h2>
+    <ul>
+        <?php foreach ($productos as $k => $v) : ?>
+            <li><?php echo $v; ?></li>
+        <?php endforeach; ?>
+    </ul>
+
+    <h2>Unidades del producto con código <?php echo $codP; ?> en la tienda <?php echo $codT; ?></h2>
+    <p><?php echo $unidades; ?></p>
+</body>
+
+</html>

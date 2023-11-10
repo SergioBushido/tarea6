@@ -1,19 +1,14 @@
 <?php
-//es la clase para conectarnos a una base de datos
+
 namespace Clases;
 
-//importamos las clases PDO y PDOException
-use PDO;//permite conectarnos a bases de datos y ejecutar consultas SQL
-use PDOException;//lanza una excepción si se produzca un error en la conexión o en la ejecución de consultas
+use PDO;
+use PDOException;
 
 class Conexion
 {
-    protected static $conexion;//es protected para que se puede acceder desde las clases que heredan de Conexión
+    protected static $conexion;
 
-
-    /**
-     * Declaramos el constructor, que crea la conexión si no existe previamente, en caso contrario no hace nada
-     */
     public function __construct()
     {
         if (self::$conexion == null) {
@@ -21,22 +16,18 @@ class Conexion
         }
     }
 
-    /**
-     * Función que nos crea una conexión con un usuario, contraseña, base de datos y la cadena de conexión dados
-     */
-    public static function crearConexion(){
-        //ponemos usuario, contraseña, base de datos
+    public static function crearConexion()
+    {
         $user = "gestor";
         $pass = "secreto";
-        $base='tarea6';
-        $dsn = "mysql:host=localhost;dbname=$base;charset=utf8mb4"; //cadena de conexión para conectarse a la bbdd
-        
+        $base = 'tarea6';
+        $dsn = "mysql:host=localhost;dbname=$base;charset=utf8mb4";
+
         try {
-            self::$conexion = new PDO($dsn, $user, $pass);//establece la conexión con los parámetros cadena de conexión, usuario y contraseña
-            self::$conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //lanza una excepción en caso de un error
+            self::$conexion = new PDO($dsn, $user, $pass);
+            self::$conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $ex) {
             die("Error en la conexión: mensaje: " . $ex->getMessage());
         }
     }
 }
-

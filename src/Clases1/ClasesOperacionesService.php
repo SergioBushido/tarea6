@@ -1,20 +1,19 @@
 <?php
-//La clase se crea mediante script generarClases.php 
+//Esto se genera automaticamente con generarClases.php
 namespace Clases\Clases1;
 
-//donde se encuentran las clases que se han generado, lo cual facilita las consultas al servidorSoap
 class ClasesOperacionesService extends \SoapClient
 {
 
     /**
-     * @var array $classmap The defined classes
+     * @var array 
      */
     private static $classmap = array (
 );
 
     /**
-     * @param array $options A array of config values
-     * @param string $wsdl The wsdl file to use
+     * @param array 
+     * @param string 
      */
     public function __construct(array $options = array(), $wsdl = null)
     {

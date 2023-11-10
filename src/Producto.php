@@ -1,8 +1,4 @@
 <?php
-/**
- * La clase Producto hace relación a la tabla Productos de la base de datos, es decir, va a tener los atributos que correspondan
- * con los campos de la base de datos
- */
 
 namespace Clases;
 
@@ -12,7 +8,7 @@ use \PDO;
 
 class Producto extends Conexion
 {
-    //atributos accesibles sólo desde la clase
+    
     private $id;
     private $nombre;
     private $nombre_corto;
@@ -20,15 +16,13 @@ class Producto extends Conexion
     private $famila;
     private $descripcion;
 
-    /**
-     * Producto constructor. LLama al constructor padre, es decir, al constructor de Conexión
-     */
+    
     public function __construct()
     {
         parent::__construct();
     }
 
-    //introducimos los getter y los setter, uno para devolver el atributo (get) y el otro para modificarlo (set)
+    // Getters y setters
     /**
      * @return mixed
      */
@@ -125,40 +119,45 @@ class Producto extends Conexion
         $this->descripcion = $descripcion;
     }
 
-    /*
-     * @param string $codF
-     * @return array|null
+    /**
+     * Devuelve los nombres de los productos de una familia específica.
+     *
+     * @param string $codF Código de la familia
+     * @return array|null Lista de nombres de productos o null si no hay productos en la familia
      */
     public function productoFamila($codF)
     {
-        //función que nos devolverá los nombres de los productos cuya familia corresponda con el código de la familia que se haya introducido
-        $consulta = "select nombre from productos where familia=:f";//creamos la variable consulta con la consulta sql que queremos realizar
-        $stmt = self::$conexion->prepare($consulta); //prepara la consulta
+        // Consulta para obtener el nombre de productos según la familia
+        $consulta = "select nombre from productos where familia=:f";
+        $stmt = self::$conexion->prepare($consulta); 
         try {
             $stmt->execute([':f' => $codF]);
-        } catch (\PDOException $ex) {//en caso de error lanza una excepción
-            die("Error al recuperar los productos x famila: " . $ex->getMessage());
+        } catch (\PDOException $ex) {
+            die("Error al recuperar los productos x familia: " . $ex->getMessage());
         }
-        if ($stmt->rowCount() == 0) return null;//si es igual a 0 devuelve null
-        while ($fila = $stmt->fetch(PDO::FETCH_OBJ)) {//recorre cada uno de los nombres y los guarda en un array
-            $productos[] = $fila->nombre;//los guarda en $productos[]
+        if ($stmt->rowCount() == 0) return null;
+        while ($fila = $stmt->fetch(PDO::FETCH_OBJ)) {
+            $productos[] = $fila->nombre;
         }
-        return $productos;//devuelve el array
+        return $productos;
     }
-    /*
-     * @param
-     * @return float|null
+
+    /**
+     * Obtiene el precio de un producto específico.
+     *
+     * @return float|null Precio del producto o null si no se encuentra el producto
      */
     public function getPrecio()
     {
-        $consulta = "select pvp from productos where id=:i"; //creamos variable con la consulta que nos devolverá el precio a partir del id de un producto
+        // Consulta para obtener el precio de un producto según su ID
+        $consulta = "select pvp from productos where id=:i"; 
         $stmt = self::$conexion->prepare($consulta);
         try {
-            $stmt->execute([':i' => $this->id]);//ejecuta la conexión, sustituyendo en la consulta el valor por el atributo
+            $stmt->execute([':i' => $this->id]);
         } catch (\PDOException $ex) {
-            die("Error al recuperar los productos x famila: " . $ex->getMessage());
+            die("Error al recuperar los productos x familia: " . $ex->getMessage());
         }
         if ($stmt->rowCount() == 0) return null;
-        return ($stmt->fetch(PDO::FETCH_OBJ))->pvp;//va a devolver uno
+        return ($stmt->fetch(PDO::FETCH_OBJ))->pvp;
     }
 }
